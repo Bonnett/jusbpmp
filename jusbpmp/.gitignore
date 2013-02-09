@@ -34,3 +34,4 @@ local.properties
 
 # Additional to hide the DLL
 *.dll
+target/**

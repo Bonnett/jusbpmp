@@ -1,6 +1,6 @@
 <project name="jusbpmp-dll" default="build" basedir=".">   
     <property name="cpp.basedir" value="src/main/cpp" />
-    <property name="cpp.bin" value="${cpp.base.dir}/Release" />
+    <property name="cpp.bin" value="${cpp.basedir}/Release" />
     
     <property name="target.dir" value="target" />
     
