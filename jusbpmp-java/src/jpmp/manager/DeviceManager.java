@@ -22,9 +22,9 @@ package jpmp.manager;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-
+import java.util.Map.Entry;
+import java.util.Set;
 
 import jpmp.common.Constant;
 import jpmp.common.OsHelper;
@@ -49,7 +49,7 @@ public class DeviceManager {
 	/**
 	 * holder for the detected devices
 	 */
-	private Map deviceList = new HashMap();
+	private Map<String, UsbDevice> deviceList = new HashMap<String, UsbDevice>();
 	
 	public static synchronized DeviceManager getInstance()throws Throwable{
 		if (_instance == null){
@@ -70,7 +70,7 @@ public class DeviceManager {
 	 * Getter for the list of detected USB devices
 	 * @return the list of detected USB devices
 	 */
-	public Map getDeviceList() {
+	public Map<String, UsbDevice> getDeviceList() {
 		return deviceList;
 	}
 
@@ -78,7 +78,7 @@ public class DeviceManager {
 	 * Set the list of detected USB devices
 	 * @param deviceList new Map of devices
 	 */
-	public void setDeviceList(Map deviceList) {
+	public void setDeviceList(Map<String, UsbDevice> deviceList) {
 		this.deviceList = deviceList;
 	}
 
@@ -127,9 +127,9 @@ public class DeviceManager {
 		synchronized(this){
 			System.out.println("===========================================");
 			if (deviceList.size()>0){
-				for (Iterator it = deviceList.keySet().iterator();it.hasNext();){
-					String key = (String)it.next();
-					UsbDevice usbdev = (UsbDevice)deviceList.get(key);
+			    Set<Entry<String, UsbDevice>> deviceEntries = deviceList.entrySet();
+			    for(Entry<String, UsbDevice> deviceEntry : deviceEntries){
+					UsbDevice usbdev = deviceEntry.getValue();
 					System.out.println(usbdev.dump());
 				}
 			} else {
