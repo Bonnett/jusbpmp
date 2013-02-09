@@ -1,0 +1,23 @@
+<project name="jusbpmp-dll" default="build" basedir=".">   
+    <property name="cpp.basedir" value="src/main/cpp" />
+    <property name="cpp.bin" value="${cpp.base.dir}/Release" />
+    
+    <property name="target.dir" value="target" />
+    
+    <target name="init">
+        <mkdir dir="${target.dir}" />
+    </target>
+    
+    <target name="build" depends="init">       
+        <!-- Build the visual studio project with the Microsft Build Tool -->
+        <exec executable="msbuild">
+            <arg value="/property:Configuration=Release"/>
+            <arg value="${cpp.basedir}/jusbpmp.sln"/>
+        </exec>
+        
+        <copy file="${cpp.bin}/jusbpmp.dll" todir="${target.dir}"/>
+        <move todir="target">
+            <fileset dir="${cpp.bin}"/>
+        </move>
+    </target>
+</project>
