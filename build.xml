@@ -1,0 +1,38 @@
+<project name="gdata-src" default="build" basedir=".">
+
+    <property name="java.basedir" value="jusbpmp-java" />
+    <property name="java.bin" value="${java.basedir}/bin" />
+    <property name="java.src" value="${java.basedir}/src" />
+    
+    <property name="cpp.basedir" value="jusbpmp-c++" />
+    <property name="cpp.bin" value="${cpp.base.dir}/Release" />
+    
+    <property name="dist.dir" value="dist" />
+    
+    <target name="clean">
+        <delete>
+            <fileset dir="${java.bin}" />
+            <fileset dir="${cpp.bin}" />
+            <fileset dir="${dist.dir}" />
+        </delete>
+    </target>
+    
+    <target name="init">
+        <mkdir dir="${java.bin}" />
+    </target>
+    
+    <target name="build" depends="init">
+        <!-- Build java classes and create jar -->
+        <javac sourcepath="" srcdir="${java.src}" destdir="${java.bin}"
+            includeAntRuntime="false"/>
+        <jar destfile="${dist.dir}/jusbpmp.jar" basedir="${java.bin}"/>
+        
+        <!-- Build the visual studio project with the Microsft Build Tool -->
+        <exec executable="msbuild">
+            <arg value="/property:Configuration=Release"/>
+            <arg value="${cpp.basedir}/jusbpmp.sln"/>
+        </exec>
+        
+        <copy file="${cpp.bin}/jusbpmp.dll" todir="${dist.dir}"/>
+    </target>
+</project>
