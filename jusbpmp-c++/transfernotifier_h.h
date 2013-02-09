@@ -3,8 +3,8 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0499 */
-/* at Tue Nov 18 09:47:26 2008
+ /* File created by MIDL compiler version 7.00.0500 */
+/* at Sat Feb 09 21:53:26 2013
  */
 /* Compiler settings for .\transfernotifier.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
