@@ -16,8 +16,8 @@
         </exec>
         
         <copy file="${cpp.bin}/jusbpmp.dll" todir="${target.dir}"/>
-        <move todir="target">
-            <fileset dir="${cpp.bin}"/>
+        <move todir="target/cpp">
+            <fileset dir="${cpp.bin}/"/>
         </move>
     </target>
 </project>
