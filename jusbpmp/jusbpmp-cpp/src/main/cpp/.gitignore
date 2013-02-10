@@ -1,0 +1,5 @@
+#Ignore generated files
+dlldata.c
+transfernotifier_p.c
+transfernotifier_h.h
+transfernotifier_i.c
