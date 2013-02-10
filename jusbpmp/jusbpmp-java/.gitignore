@@ -32,4 +32,4 @@ local.properties
 *.war
 *.ear
 
-target/**
+target/

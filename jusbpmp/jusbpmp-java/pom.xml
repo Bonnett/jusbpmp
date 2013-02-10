@@ -17,7 +17,47 @@
       <groupId>uk.co.pete_b</groupId>
       <artifactId>jusbpmp-cpp</artifactId>
       <version>${project.version}</version>
+      <classifier>win32</classifier>
+      <type>dll</type>
     </dependency>
   </dependencies>
+  
+    <build>
+    <plugins>
+     <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>uk.co.pete_b</groupId>
+                  <artifactId>jusbpmp-cpp</artifactId>
+                  <version>${project.version}</version>
+                  <classifier>win32</classifier>
+                  <type>dll</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+            <argLine>-Djusbpmp.dll.location=${project.build.directory}\lib\jusbpmp-cpp.dll</argLine>
+        </configuration>
+      </plugin>
+    </plugins>
+      </build>
 
 </project>

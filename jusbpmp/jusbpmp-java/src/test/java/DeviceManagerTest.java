@@ -13,6 +13,7 @@ public class DeviceManagerTest
     @Test
     public void testDevice() throws Throwable
     {
+        System.out.println(System.getProperty("java.library.path"));
         DeviceManager dm = DeviceManager.getInstance();
         dm.createInstance();
         dm.scanDevices();

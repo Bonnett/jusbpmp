@@ -1,41 +1,180 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-      <groupId>uk.co.pete_b</groupId>
-      <artifactId>jusbpmp</artifactId>
-      <version>1.0-SNAPSHOT</version>
-  </parent>
-  
-  <artifactId>jusbpmp-cpp</artifactId>
-  <packaging>jar</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>uk.co.pete_b</groupId>
+        <artifactId>jusbpmp</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.7</version>
-        <executions>
-          <execution>
-            <id>compile</id>
-            <phase>compile</phase>
-            <configuration>
-              <target>
-                <ant antfile="${basedir}/build-dll.xml">
-                  <target name="build"/>
-                </ant>
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <artifactId>jusbpmp-cpp</artifactId>
+    <packaging>dll</packaging>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>createBuildDir</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target>
+                                <mkdir dir="target/temp" />
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- midl /char signed /env win32 /I "C:\Program Files\\Microsoft SDKs\Windows\v6.0A\include" /tlb "../../../target/temp/jusbpmp.tlb" 
+                    /h "transfernotifier_h.h" src\main\cpp\transfernotifier.idl /out src/main/cpp/ /nologo -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <id>build-midl</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>midl</executable>
+                            <arguments>
+                                <argument>/char</argument>
+                                <argument>signed</argument>
+                                <argument>/env</argument>
+                                <argument>win32</argument>
+                                <argument>/I</argument>
+                                <argument>"C:\Program Files\Microsoft SDKs\Windows\v6.0A\include"</argument>
+                                <argument>/tlb</argument>
+                                <argument>../../../target/temp/jusbpmp.tlb</argument>
+                                <argument>/h</argument>
+                                <argument>transfernotifier_h.h</argument>
+                                <argument>src\main\cpp\transfernotifier.idl</argument>
+                                <argument>/out</argument>
+                                <argument>src/main/cpp/</argument>
+                                <argument>/nologo</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
 
+                    <!--"rc.exe /d "_UNICODE" /d "UNICODE" /fo"Release/jusbpmp.res" ".\jusbpmp.rc"" -->
+                    <execution>
+                        <id>build-res</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>rc</executable>
+                            <arguments>
+                                <argument>/d</argument>
+                                <argument>"_UNICODE"</argument>
+                                <argument>/d</argument>
+                                <argument>"UNICODE"</argument>
+                                <argument>/fo"target/temp/jusbpmp.res"</argument>
+                                <argument>/i</argument>
+                                <argument>"C:\Program Files\Microsoft SDKs\Windows\v6.0A\include"</argument>
+                                <argument>/i</argument>
+                                <argument>"C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\atlmfc\include"</argument>
+                                <argument>/i</argument>
+                                <argument>"C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include"</argument>
+                                <argument>src/main/cpp/jusbpmp.rc</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>1.0-alpha-7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <javahOS>win32</javahOS>
+                    <classifier>win32</classifier>
+                    <jdkIncludePath>C:\Progra~1\Java\jdk1.7.0_13\include</jdkIncludePath>
+                    <envFactoryName>org.codehaus.mojo.natives.msvc.MSVC2008x86EnvFactory</envFactoryName>
+
+                    <compilerProvider>msvc</compilerProvider>
+
+                    <compilerStartOptions>
+                        <compilerStartOption>/D "WIN32"</compilerStartOption>
+                        <compilerStartOption>/D "NDEBUG"</compilerStartOption>
+                        <compilerStartOption>/D "_WINDOWS"</compilerStartOption>
+                        <compilerStartOption>/D "_USRDLL"</compilerStartOption>
+                        <compilerStartOption>/D "JUSBPMP_EXPORTS"</compilerStartOption>
+                        <compilerStartOption>/D "_WINDLL"</compilerStartOption>
+                        <compilerStartOption>/D "_UNICODE"</compilerStartOption>
+                        <compilerStartOption>/D "UNICODE"</compilerStartOption>
+                        <compilerStartOption>/FD</compilerStartOption>
+                        <compilerStartOption>/EHsc</compilerStartOption>
+                        <compilerStartOption>/MD</compilerStartOption>
+                        <compilerStartOption>/Ycstdafx.h</compilerStartOption>
+                        <compilerStartOption>/Fp"target\temp\jusbpmp.pch"</compilerStartOption>
+                        <compilerStartOption>/Fd"target\temp\vc90.pdb"</compilerStartOption>
+                        <compilerStartOption>/W3</compilerStartOption>
+                        <compilerStartOption>/c</compilerStartOption>
+                        <compilerStartOption>/Wp64</compilerStartOption>
+                        <compilerStartOption>/Zi</compilerStartOption>
+                        <compilerStartOption>/TP</compilerStartOption>
+                        <compilerStartOption>/nologo</compilerStartOption>
+                    </compilerStartOptions>
+
+                    <sources>
+                        <source>
+                            <directory>src/main/cpp</directory>
+                            <fileNames>
+                                <fileName>stdafx.cpp</fileName>
+                                <fileName>usbdevmanapp.cpp</fileName>
+                                <fileName>usbdevice_info.cpp</fileName>
+                                <fileName>usbdevice.cpp</fileName>
+                                <fileName>TransferNotifier.cpp</fileName>
+                                <fileName>jusbpmp.cpp</fileName>
+                                <fileName>jusbdevice.cpp</fileName>
+                                <fileName>jsyncnotifier.cpp</fileName>
+                                <fileName>jdevicemanager.cpp</fileName>
+                                <fileName>isyncnotifier.cpp</fileName>
+                                <fileName>helperlib.cpp</fileName>
+                                <fileName>filemetadata.cpp</fileName>
+                                <fileName>devicemanager.cpp</fileName>
+                                <fileName>AppAtlModule.cpp</fileName>
+                            </fileNames>
+                        </source>
+                    </sources>
+                    <linkerSecondaryOutputExtensions>lib</linkerSecondaryOutputExtensions>
+
+                    <linkerStartOptions>
+                        <linkerStartOption> /INCREMENTAL:NO
+                            /LIBPATH:"C:\WMSDK\WMFSDK11\lib"
+                            /LIBPATH:"C:\WMSDK\WMFSDK11\WMDM\lib\\" /DLL
+                            /MANIFEST
+                            /MANIFESTFILE:"target\jusbpmp-cpp.dll.manifest"
+                            /MANIFESTUAC:"level='asInvoker'
+                            uiAccess='false'" /DEBUG
+                            /PDB:"target\temp\vc90.pdb"
+                            /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF
+                            /LTCG /DYNAMICBASE:NO /MACHINE:X86 mssachlp.lib
+                            wmvcore.lib
+                            setupapi.lib kernel32.lib user32.lib
+                            gdi32.lib winspool.lib
+                            comdlg32.lib advapi32.lib shell32.lib
+                            ole32.lib oleaut32.lib
+                            uuid.lib odbc32.lib odbccp32.lib</linkerStartOption>
+                    </linkerStartOptions>
+
+                    <linkerEndOptions>
+                        <linkerEndOption>target/temp/jusbpmp.res</linkerEndOption>
+                    </linkerEndOptions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -24,6 +24,6 @@ public class Constant {
 	public static final String version = "0.1.3";
 	public static final String shortLinuxLibname = "jusbpmp";
 	public static final String fullLinuxLibname = "libjusbpmp-" + version + ".so";
-	public static final String shortWindowsLibname = "jusbpmp";
-	public static final String fullWindowsLibname = "jusbpmp.dll";
+	public static final String shortWindowsLibname = "jusbpmp-cpp";
+	public static final String fullWindowsLibname = "jusbpmp-cpp.dll";
 }

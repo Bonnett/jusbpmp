@@ -114,9 +114,7 @@ public class DeviceManager {
 		} catch(Throwable t){
 		}
 		if (!libloaded){
-			File f = new File(".");
-			String currentDir = f.getCanonicalPath();
-			System.load(currentDir + File.separator + fullLibName);
+			System.load(System.getProperty("jusbpmp.dll.location"));
 		}
 	}
 	
