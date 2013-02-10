@@ -32,6 +32,4 @@ local.properties
 *.war
 *.ear
 
-# Additional to hide the DLL
-*.dll
 target/**
